@@ -1,0 +1,186 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Santa's Super Sleigh</title>
+    
+    <meta name="description" content="Santa's Super Sleigh">
+    <meta name="author" content="Dave Brown">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Link to the stylesheet -->
+    
+        <link rel="stylesheet" href="style.css">
+            
+    <!-- link or CDN to: JQuery, Bootstrap, fontawesome, and Google web fonts -->
+            
+</head>
+<body id = "body">
+    
+    <div class = "container-fluid">
+        
+    </div><!-- End of container-fluid -->
+    
+    <div id = "formArea">
+        <fieldset>
+            <form>
+                <p>What's your name? <input type = "text" id = "heroName" autofocus></p>
+                <p>Who's your best friend? <input type = "text" id = "bestFriendName"></p>
+                
+                <p>What grade are you in?
+                <select id = "rawGrade">
+                    <option value=""></option>
+                    <option value="P1">P1</option>
+                    <option value="P2">P2</option>
+                    <option value="P3">P3</option>
+                    <option value="P4">P4</option>
+                    <option value="P5">P5</option>
+                    <option value="P6">P6</option>
+                </select>
+               
+                <p>What class are you in?
+                <select id = "rawClass">
+                    <option value=""></option>
+                    <option value="A">A class</option>
+                    <option value="B">B class</option>
+                    <option value="C">C class</option>
+                    <option value="D">D class</option>
+                </select>
+                </p>
+                
+                <input type="button" value="Let's start reading!" onclick="startUp()"/>  
+        
+            </form>
+        </fieldset>
+    </div>
+    
+    <div id = "outputArea">
+        <h1 id = "headerArea"></h1>
+        <div id = "imageArea"></div>
+        <div id = "textArea"></div>
+        <input type="button" value="Next chapter!" onclick="nextChapter()"/>
+    </div>
+    
+    <!-- Javascript includes go here, for performance -->
+    <script>
+        
+        //set globals:
+        var counter = 0;
+        var thisImg = "chapter"+(counter+1)+".jpeg";
+        
+        //hide the outputArea:
+        var outputArea = document.getElementById("outputArea");
+        outputArea.style.display = "none";
+        
+        function startUp() {
+            
+            /*This fucntion runs on clicking the submit button in the form. It gets the form data, makes the correct variables ($hero, $bestFriend and $heroClass, and then makes the header and text arrays and outputs the first chapter and image, then hides the form and unhides the output area*/
+            
+            //get the form data and format it:
+            var $hero = document.getElementById("heroName").value;
+            $hero = capitalizeFirstLetter($hero);
+            var $bestFriend = document.getElementById("bestFriendName").value;
+            $bestFriend = capitalizeFirstLetter($bestFriend);
+            
+            //Make the class data:
+            var $rawGrade = document.getElementById("rawGrade").value;
+            var $rawClass = document.getElementById("rawClass").value;
+            var $heroClass = $rawGrade+$rawClass;
+            
+            //make the arrays for header and text:
+            var headerArray = makeHeaderArray($heroClass);
+            var textArray = makeTextArray($hero, $bestFriend, $heroClass); 
+            
+            //Hide the form:
+            var formArea = document.getElementById("formArea");
+            formArea.style.display = "none";
+            //unhide the outputArea:
+            outputArea.style.display = "block";
+
+            //make the first chapter:
+            var theHeader = headerArray[counter];
+            var theText = textArray[counter];
+            document.getElementById("headerArea").innerHTML = theHeader;
+            document.getElementById("textArea").innerHTML = theText;
+            createImage(thisImg);
+            
+        }
+        
+        function nextChapter(){
+            
+            var headerArray = makeHeaderArray($heroClass);
+            var textArray = makeTextArray($hero, $bestFriend, $heroClass);
+
+            //increment counter:
+            counter++;
+            //if the story isn't finished:
+            if (counter < headerArray.length){
+                theHeader = headerArray[counter];
+                theText = textArray[counter];
+                document.getElementById("headerArea").innerHTML = theHeader;
+                document.getElementById("textArea").innerHTML = theText;
+                thisImg = "chapter"+(counter+1)+".jpeg";
+                createImage(thisImg);
+                
+            //if the story is finished
+            } else if (counter > headerArray.length) {
+                theHeader = "The End!";
+                theText = "You've finished the story. Well done!";
+                document.getElementById("headerArea").innerHTML = theHeader;
+                document.getElementById("textArea").innerHTML = theText;
+                thisImg = "theEnd.jpeg";
+                createImage(thisImg);
+            }
+            
+            return counter;
+            
+        }//end of nextChapter()
+        
+        function capitalizeFirstLetter(string) {
+            string = string.trim();
+            string = string.toLowerCase();
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        
+        function createImage(thisImg) {
+            //remove the last image
+            var imageArea = document.getElementById("imageArea");
+            
+            while (imageArea.hasChildNodes()){
+                imageArea.removeChild(imageArea.lastChild);
+            }
+            
+            //append the new image:
+            var img = document.createElement("IMG");
+            img.src = "images/"+thisImg;
+            document.getElementById('imageArea').appendChild(img);
+        }
+        
+        function makeHeaderArray(heroClass){
+            $heroClass = heroClass;
+            var headerArray = ["The Magic Book", "The Missing Elves", "Class " +$heroClass+ " Helps Out!"];
+            return headerArray;
+        }
+        
+        function makeTextArray(hero, bestFriend, heroClass){
+            
+            $hero = hero;
+            $bestFriend = bestFriend;
+            $heroClass = heroClass;
+            
+            var textArray = ["It’s late December, and "+$hero+" and "+$bestFriend+" are watching TV. "+$bestFriend+" is bored, so "+$hero+" suggests that they should try reading an old book that "+$hero+" found. "+$hero+" and "+$bestFriend+" read the book together, and when "+$hero+" says a special magic spell that has been written into the book, they are moved by magic to the North Pole, and find themselves in Santa’s house.", 
+        
+            $hero+" and "+$bestFriend+" look around, and are amazed at everything they see: they're inside Santa's house at the North Pole. Suddenly "+$hero+" and "+$bestFriend+" see Santa, and he is not his usual happy self. “I really need help with all my present wrapping and making, because nearly all my elves are gone. I don’t know what has happened to them!", 
+        
+            "Of course "+$hero+" and "+$bestFriend+" say they’ll help! It’s very important that Christmas is saved. "+$hero+" calls up "+$heroClass+ ", and Santa uses his magic to bring them all to the workshop in the North Pole. The boys and girls in "+$heroClass+ " are very surprised to be there, but when "+$hero+" tells them what is wrong, they all agree to help at once! They get to work on the big machines, and in no time at all the presents are sorted and wrapped and ready to go."]; 
+            
+            return textArray;
+        }
+        
+    </script>
+    
+</body>
+</html>
