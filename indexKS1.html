@@ -1,0 +1,250 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>How the Grinch Saved Christmas</title>
+    
+    <meta name="description" content="How the Grinch Saved Christmas">
+    <meta name="author" content="Dave Brown">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Links to frameworks -->
+    
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/js/bootstrap.min.js">
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">      
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/tether/dist/js/tether.min.js"></script>
+
+    <!-- Link to the stylesheet -->
+    
+    <link rel="stylesheet" href="style.css">
+            
+    <!-- link or CDN to: JQuery, Bootstrap, fontawesome, and Google web fonts -->
+            
+</head>
+<body id = "body" background ="images/xmasBackground.jpeg">
+    
+    <div class = "container-fluid">
+    
+    <div class = "row">
+    
+    <div class = "col-xs-2"></div>
+    <div class = "col-xs-8">
+    
+    <div id = "formArea">
+        <fieldset>
+            <form>
+                <h1>How the Grinch Saved Christmas!</h1>
+                <h4>Please answer these questions:</h4>
+                <p>What's your name? <input type = "text" id = "heroName" autofocus></p>
+                <p>Who's your best friend? <input type = "text" id = "bestFriendName"></p>
+                
+                <p>What grade are you in?
+                <select id = "rawGrade">
+                    <option value=""></option>
+                    <option value="P1">P1</option>
+                    <option value="P2">P2</option>
+                    <option value="P3">P3</option>
+                </select>
+               
+                <p>What class are you in?
+                <select id = "rawClass">
+                    <option value=""></option>
+                    <option value="A">A class</option>
+                    <option value="B">B class</option>
+                    <option value="C">C class</option>
+                    <option value="D">D class</option>
+                </select>
+                </p>
+                
+                <input type="button" class = "btn btn-primary btn-lg" value="Let's start reading!" onclick="startUp()"/> 
+                <img src="images/grinchSled.gif">
+        
+            </form>
+        </fieldset>
+    </div>
+    
+    <div id = "outputArea">
+        <h1 id = "headerArea"></h1>
+        <div id = "imageArea"></div>
+        <div id = "textArea"></div>
+        <input type="button" class = "btn btn-primary btn-lg" value="Next chapter!" onclick="nextChapter()"/>
+    </div>
+    
+    
+    </div><!-- End of main col -->
+
+    <div class = "col-xs-2"></div>
+   
+    
+    </div><!-- End of Row -->
+    </div><!-- End of container-fluid
+    
+    <!-- Javascript includes go here, for performance -->
+    
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>  
+    <script src="bower_components/tether/dist/js/tether.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        
+        //set globals:
+        var counter = 0;
+        var thisImg = "chapter"+(counter+1)+".jpeg";
+        
+        //hide the outputArea:
+        var outputArea = document.getElementById("outputArea");
+        outputArea.style.display = "none";
+        
+       function validateForm() {
+            
+            var $hero = document.getElementById("heroName").value;
+            var $bestFriend = document.getElementById("bestFriendName").value
+            var $rawGrade = document.getElementById("rawGrade").value;
+            var $rawClass = document.getElementById("rawClass").value;
+            
+            if ($hero==null || $hero=="",$bestFriend==null || $bestFriend=="",$rawClass==null || $rawClass=="",$rawGrade==null || $rawGrade==""){
+                alert("Please Fill All Required Fields");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        
+        function startUp() {
+            
+            /*This function runs on clicking the submit button in the form. It gets the form data, makes the correct variables ($hero, $bestFriend and $heroClass, and then makes the header and text arrays and outputs the first chapter and image, then hides the form and unhides the output area*/
+            
+            var carryOn = validateForm();
+            
+            if (carryOn === true) {
+            
+            //get the form data and format it:
+            var $hero = document.getElementById("heroName").value;
+            $hero = capitalizeFirstLetter($hero);
+            var $bestFriend = document.getElementById("bestFriendName").value;
+            $bestFriend = capitalizeFirstLetter($bestFriend);
+            
+            //Make the class data:
+            var $rawGrade = document.getElementById("rawGrade").value;
+            var $rawClass = document.getElementById("rawClass").value;
+            var $heroClass = $rawGrade+$rawClass;
+            
+            //make the arrays for header and text:
+            var headerArray = makeHeaderArray($heroClass);
+            var textArray = makeTextArray($hero, $bestFriend, $heroClass); 
+            
+            //Hide the form:
+            var formArea = document.getElementById("formArea");
+            formArea.style.display = "none";
+            //unhide the outputArea:
+            outputArea.style.display = "block";
+
+            //make the first chapter:
+            var theHeader = headerArray[counter];
+            var theText = textArray[counter];
+            document.getElementById("headerArea").innerHTML = theHeader;
+            document.getElementById("textArea").innerHTML = theText;
+            createImage(thisImg);
+                
+            }
+            
+        }
+        
+        function nextChapter(){
+            
+            var headerArray = makeHeaderArray($hero, $bestFriend, $heroClass);
+            var textArray = makeTextArray($hero, $bestFriend, $heroClass);
+
+            //increment counter:
+            counter++;
+            //if the story isn't finished:
+            if (counter < headerArray.length){
+                theHeader = headerArray[counter];
+                theText = textArray[counter];
+                document.getElementById("headerArea").innerHTML = theHeader;
+                document.getElementById("textArea").innerHTML = theText;
+                thisImg = "chapter"+(counter+1)+".jpeg";
+                createImage(thisImg);
+                
+            //if the story is finished
+            } else if (counter > headerArray.length) {
+                theHeader = "The End!";
+                theText = `<p>So that’s the story of how the Grinch saved Christmas… with a little help from ${$hero}, ${$bestFriend} and ${$heroClass}!</p><p>You've finished the story.</p><p>Well done!</p>`;
+                document.getElementById("headerArea").innerHTML = theHeader;
+                document.getElementById("textArea").innerHTML = theText;
+                thisImg = "theEnd.jpeg";
+                createImage(thisImg);
+            }
+            
+            return counter;
+            
+        }//end of nextChapter()
+        
+        function capitalizeFirstLetter(string) {
+            string = string.trim();
+            string = string.toLowerCase();
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        
+        function createImage(thisImg) {
+            //remove the last image
+            var imageArea = document.getElementById("imageArea");
+            
+            while (imageArea.hasChildNodes()){
+                imageArea.removeChild(imageArea.lastChild);
+            }
+            
+            //append the new image:
+            var img = document.createElement("IMG");
+            img.src = "images/"+thisImg;
+            document.getElementById('imageArea').appendChild(img);
+        }
+        
+        function makeHeaderArray($hero, $bestFriend, heroClass){
+            $heroClass = heroClass;
+            var headerArray = ["A Good Book, and a Surprise!", "Big Trouble!", `${$hero}, ${$bestFriend} and ${$heroClass} help out!`,
+                              `Finding the Sleigh`, `${$hero} and ${$bestFriend} help Santa and the Grinch!`];
+            return headerArray;
+        }
+        
+        function makeTextArray(hero, bestFriend, heroClass){
+            
+            $hero = hero;
+            $bestFriend = bestFriend;
+            $heroClass = heroClass;
+            
+            var textArray = [`<p>${$hero} and ${$bestFriend} are reading a book in the park. It’s a good book, and they are having fun reading it. They look in the sky. They see Santa’s sleigh flying through the air, and two people fall out of it.</p>`, 
+        
+            `<p>These two people land on the floor in front of ${$hero} and ${$bestFriend}. ${$hero} sees that it is the Grinch and Cindy Lou Who - people from the story book!</p>  
+
+
+            <p>“Are you OK?” asks ${$hero}.</p>
+            <p>“No - but there will be no Christmas this year!” shouts the Grinch.</p>
+            <p>“Why?” asks ${$bestFriend}.</p>
+
+
+            <p>Cindy Lou tells ${$hero} and ${$bestFriend} that Santa’s sleigh, and all the presents, have been taken by Fishface, a very bad man who hates Christmas because he is too naughty to get any presents!</p>`, 
+        
+            `<p>“Where will Fishface take the sleigh?” asks ${$hero}.</p>
+
+            <p>“I think he is going to MCYOS!”</p>
+
+            <p>“That’s our school!” says ${$hero}, and ${$bestFriend} grabs a phone to call ${$heroClass}. Everyone in ${$heroClass} agrees to help catch Fishface.</p>`,
+            
+            `<p>When ${$hero}, ${$bestFriend} and ${$heroClass} go to MCYOS they see Santa is tied up! The Grinch catches Fishface while ${$heroClass}, ${$bestFriend} and ${$hero} help Santa!</p>`,
+                             
+            `<p>Santa is very worried! It’s too late to deliver the presents by himself, because Fishface has made him so late. ${$hero} offers to help, and ${$bestFriend} and the Grinch also go along. With all the help, Santa can deliver the presents, and Christmas is saved!</p>`]; 
+            
+            return textArray;
+        }
+        
+    </script>
+    
+</body>
+</html>

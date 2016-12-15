@@ -1,10 +1,12 @@
 html {
-    background: #D3D3D3;  
+     
     -webkit-font-smoothing: antialiased;
+    
 }
 
 body {
-    background: #D3D3D3;
+    background-image: url("images/xmasBackground.jpeg");
+    /*background: #D3D3D3;*/
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.06);
     color: black;
     /*color: #545454;
@@ -16,6 +18,10 @@ body {
     padding: 2em 2em 4em 4em;
 }
 
+.col-xs-8 {
+    background-color: white;
+}
+
 .sidebar{
     
 }
@@ -25,8 +31,7 @@ body {
 }
 
 .btn {
-    color: white;
-    background-color: #D3D3D3;
+    
 }
 
 .twitter-link {
